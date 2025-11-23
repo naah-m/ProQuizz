@@ -24,10 +24,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const storedUser = await AsyncStorage.getItem('@App:user');
 
         if (storedUser) {
-          setUser(JSON.parse(storedUser));
+          const parsedUser = JSON.parse(storedUser);
+          if(parsedUser && typeof parsedUser === 'object' && parsedUser.id){
+            setUser(parsedUser);
+          } else {
+             console.warn('Dado corrompido encontrado. Limpando sessão.');
+             await AsyncStorage.removeItem('@App:user');
+          }
         }
       } catch (error) {
-        console.log('Erro ao carregar storage: ', error);
+        console.log('Erro ao carregar dados do storage. Resetando ', error);
+        await AsyncStorage.multiRemove(['@App:user', '@App:onboardingComplete']);
       } finally {
         setLoading(false);
       }

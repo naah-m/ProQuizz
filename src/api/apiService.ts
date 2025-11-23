@@ -12,14 +12,6 @@ const MOCK_USER: Usuario = {
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export const apiService = {
-  /**
-   * Simula a chamada de login na API.
-   * @param email O email fornecido.
-   * @param password A senha fornecida.
-   * @returns Retorna um objeto IUsuario em caso de sucesso.
-   * @throws Lança um erro se as credenciais forem inválidas.
-   */
-  
   login: async (email: string, password: string): Promise<Usuario> => {
     await delay(1500); 
 

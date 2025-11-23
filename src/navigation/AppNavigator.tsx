@@ -1,5 +1,5 @@
 import React from 'react';
-import { useColorScheme, Platform, View } from 'react-native';
+import { useColorScheme, Platform, View, ActivityIndicator } from 'react-native';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -105,11 +105,16 @@ function AppStack() {
 
 export function Routes() {
   const { user, loading } = useAuth();
+
   const scheme = useColorScheme();
   const currentTheme = scheme === 'dark' ? DarkTheme : DefaultTheme;
 
   if (loading) {
-    return <View style={{ flex: 1, backgroundColor: currentTheme.colors.background }} /> ;
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: scheme === 'dark' ? 'black' : 'white' }}>
+        <ActivityIndicator size="large" color={scheme === 'dark' ? 'white' : 'black'} />
+      </View>
+    );
   }
 
   return (
