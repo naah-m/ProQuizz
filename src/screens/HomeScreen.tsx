@@ -9,7 +9,7 @@ import { styles } from '../styles/home.styles';
 
 export function HomeScreen({ navigation }: HomeProps) {
 
-    const { user, signOut } = useAuth();
+    const { user } = useAuth();
     const [loadingState, setLoadingState] = useState(true);
     const [isFirstTime, setIsFirstTime] = useState(false); 
 
@@ -87,22 +87,6 @@ export function HomeScreen({ navigation }: HomeProps) {
           <Text style={[styles.buttonText, { color: currentTheme.buttonText }]}>
             {isFirstTime ? 'VAMOS COMEÇAR!' : 'CONTINUAR JORNADA'}
           </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={ async () => {
-          await AsyncStorage.removeItem('@App:onboardingComplete');
-          setIsFirstTime(true);
-          Alert.alert('Dev Mode', 'Onboarding resetado! O app acha que é sua primeira vez.');
-        }} style={{ marginTop: 40 }}>
-            <Text style={{ color: currentTheme.text, fontSize: 12 }}>
-                (Resetar Primeira Vez - DEV ONLY)
-            </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={signOut} style={{ marginTop: 20 }}>
-            <Text style={{ color: currentTheme.text }}>
-                Sair (Logout)
-            </Text>
         </TouchableOpacity>
 
       </View>

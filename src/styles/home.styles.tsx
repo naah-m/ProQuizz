@@ -1,7 +1,7 @@
 import { StyleSheet, Dimensions } from 'react-native';
 
 const { width } = Dimensions.get('window');
-const CIRCLE_SIZE = width * 0.55; // Ajustando o tamanho do círculo
+const CIRCLE_SIZE = width * 0.55;
 
 export const styles = StyleSheet.create({
   container: {
@@ -23,7 +23,7 @@ export const styles = StyleSheet.create({
   },
 
   nicknameText: {
-    fontWeight: 'bold' // O apelido em negrito
+    fontWeight: 'bold'
   },
 
   instructionCard: {
@@ -33,7 +33,7 @@ export const styles = StyleSheet.create({
     padding: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 60 // Espaço antes do botão
+    marginBottom: 60
   },
 
   instructionText: {
@@ -45,9 +45,10 @@ export const styles = StyleSheet.create({
   circularButton: {
     width: CIRCLE_SIZE,
     height: CIRCLE_SIZE,
-    borderRadius: CIRCLE_SIZE / 2, // Garante que é um círculo
+    borderRadius: CIRCLE_SIZE / 2,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginTop: 60
   },
 
   buttonText: {
@@ -58,7 +59,7 @@ export const styles = StyleSheet.create({
   },
 
   dataFeedback: {
-        minHeight: 80, // Garante que a tela não "pule" ao carregar
+        minHeight: 80, 
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 20
@@ -69,7 +70,7 @@ export const styles = StyleSheet.create({
   },
   
   reloadText: {
-        color: '#4A90E2', // Azul para o link de recarga
+        color: '#4A90E2',
         marginTop: 5,
         fontWeight: 'bold',
         fontSize: 14

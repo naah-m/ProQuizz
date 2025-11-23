@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, TouchableOpacity, useColorScheme, ScrollView, Alert, ActivityIndicator, StatusBar } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Feather from '@expo/vector-icons/Feather';
 
@@ -39,7 +40,8 @@ const ModuleCard: React.FC<ModuleCardProps> = ({ title, description, isCompleted
 
 export function CursoScreen({ navigation, route }: CursoProps) {
 
-  const { areaId } = route.params; 
+  const { areaId } = route.params;
+  const insets = useSafeAreaInsets();
 
   const [areaData, setAreaData] = useState<AreaAtuacao | null>(null);
   const [loading, setLoading] = useState(true);
@@ -57,26 +59,47 @@ export function CursoScreen({ navigation, route }: CursoProps) {
   const isDarkMode = deviceTheme === 'dark';
   const currentTheme = isDarkMode ? theme.dark : theme.light;
 
-  const insets = useSafeAreaInsets();
+  const STORAGE_KEY = `@App:progress:${areaId}`;
 
   useEffect(() => {
-    async function fetchArea() {
+    async function loadData() {
       try {
+        setLoading(true);
+
         const data = await areaService.getById(areaId);
         setAreaData(data || null);
+
+        const storedProgress = await AsyncStorage.getItem(STORAGE_KEY);
+
+        if (storedProgress) {
+          const completedIds: number[] = JSON.parse(storedProgress);
+          setModules(prev => prev.map(m => completedIds.includes(m.id) ? { ...m, isCompleted: true } : m ));
+        }
+
       } catch (e) {
         Alert.alert('Erro', 'Não foi possível carregar o material');
       } finally {
         setLoading(false);
       }
     }
-    fetchArea();
+    loadData();
   }, [areaId]);
 
   const handleModulePress = (id: number) => {
     Alert.alert( 'Conteúdo Lido', `Simulando a leitura do módulo ${id}.`,
         [
-            { text: 'Concluir', onPress: () => { setModules(prev => prev.map(m => m.id === id ? { ...m, isCompleted: true } : m) ); }}
+          { text: 'Cancelar', style: 'cancel' },
+          { text: 'Concluir', onPress: async () => {
+            const newModules = modules.map(m => m.id === id ? { ...m, isCompleted: true } : m);
+            setModules(newModules);
+
+            try {
+              const completedIds = newModules.filter(m => m.isCompleted).map(m => m.id);
+              await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(completedIds));
+            } catch (error) {
+              console.error('Erro ao salvar o progresso', error);
+            }
+          }} 
         ]
     );
   };
