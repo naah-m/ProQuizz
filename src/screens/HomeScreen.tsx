@@ -1,40 +1,70 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, TouchableOpacity, SafeAreaView, useColorScheme, Alert, ActivityIndicator } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { theme } from '../styles/theme/colors';
 import { useAuth } from '../context/AuthContext';
 import { HomeProps } from '../navigation/types';
-import { useFetchAreas } from '../hooks/useFetchAreas';
 import { styles } from '../styles/home.styles';
 
 export function HomeScreen({ navigation }: HomeProps) {
 
     const { user, signOut } = useAuth();
-
-    const [isFirstTime, setIsFirstTime] = useState(true); 
-
-    const { areas, loading: loadingAreas, error: areasError, reload: reloadAreas } = useFetchAreas();
+    const [loadingState, setLoadingState] = useState(true);
+    const [isFirstTime, setIsFirstTime] = useState(false); 
 
     const deviceTheme = useColorScheme();
     const isDarkMode = deviceTheme === 'dark';
     const currentTheme = isDarkMode ? theme.dark : theme.light;
 
-    const handleMainButton = useCallback(() => {
+    useEffect(() => {
+      checkOnboardingStatus();
+    }, []);
+
+    const checkOnboardingStatus =  async () => {
+      try {
+        setLoadingState(true);
+        const value = await AsyncStorage.getItem('@App:onboardingComplete');
+        if (value === null) {
+          setIsFirstTime(true);
+        } else {
+          setIsFirstTime(false);
+        }
+      } catch (e) {
+        console.log('Erro ao verificar ', e);
+      } finally {
+        setLoadingState(false);
+      }
+    };
+
+    const handleMainButton = useCallback(async () => {
     if (isFirstTime) {
-      // 🎯 Se for a primeira vez, o botão leva para a tela de seleção/material
-      Alert.alert('Funcionalidade', 'Navegar para a Seleção de Áreas de Atuação!');
-      //navigation.navigate('MaterialTab'); // Exemplo: Navega para a aba de Materiais
+      try {
+        await AsyncStorage.setItem('@App.onboardingComplete', 'true');
+        setIsFirstTime(false);
+        Alert.alert('Bem-vindo!', 'Vamos começar escolhendo sua trilha');
+        navigation.navigate('AppTabs', { screen: 'MaterialTab'});
+
+      } catch (e) {
+        Alert.alert('Não foi possível salvar seu progresso');
+      } 
+      
     } else {
-      // 🎯 Se não for a primeira vez, leva ao último material
-      Alert.alert('Funcionalidade', 'Navegar para o Último Material Aberto!');
-      // Ex: navigation.navigate('Quiz', { areaId: user.lastAreaId });
+        Alert.alert('Bem-vindo de volta!', 'Te levando para seu último conteúdo');
+        navigation.navigate('AppTabs', { screen: 'MaterialTab'});
+      }
+    }, [navigation, isFirstTime]);
+
+    if (loadingState) {
+      return (
+        <View style={[styles.container, { backgroundColor: currentTheme.background, justifyContent: 'center', alignItems: 'center' }]}>
+          <ActivityIndicator size="large" color={currentTheme.buttonBackground} />
+        </View>
+      );
     }
-  }, [navigation, isFirstTime]);
 
   return (
-    <SafeAreaView 
-      style={[styles.container, { backgroundColor: currentTheme.background }]}
-    >
+    <SafeAreaView style={[styles.container, { backgroundColor: currentTheme.background }]}>
       <View style={styles.content}>
 
         <Text style={[styles.headerText, { color: currentTheme.text }]}>
@@ -44,61 +74,34 @@ export function HomeScreen({ navigation }: HomeProps) {
           </Text>
         </Text>
 
-        <View 
-          style={[
-            styles.instructionCard, 
-            { backgroundColor: currentTheme.inputBackground }
-          ]}
-        >
+        <View style={[ styles.instructionCard, { backgroundColor: currentTheme.inputBackground } ]}>
           <Text style={[styles.instructionText, { color: currentTheme.text }]}>
-            Explicando um pouco do aplicativo e como começar a usar
+            {isFirstTime 
+              ? "Como é sua primeira vez, vamos mapear suas áreas de interesse para sugerir o melhor caminho!"
+              : "Continue sua jornada de aprendizado e conquiste novas badges hoje mesmo."
+            }
           </Text>
         </View>
 
-        <View style={styles.dataFeedback}>
-            {loadingAreas && (
-                <ActivityIndicator 
-                    size="large" 
-                    color={currentTheme.buttonBackground} 
-                />
-            )}
-
-            {areasError && (
-                <View style={styles.errorContainer}>
-                    <Text style={{ color: 'red', textAlign: 'center' }}>
-                        {areasError}
-                    </Text>
-                    <TouchableOpacity onPress={reloadAreas}>
-                        <Text style={styles.reloadText}>
-                            Tentar Recarregar
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-            )}
-
-            {!loadingAreas && !areasError && (
-                <Text style={{ color: currentTheme.inputPlaceholder }}>
-                    {areas.length} Áreas de Atuação Prontas!
-                </Text>
-            )}
-        </View>
-
-        <TouchableOpacity
-          style={[styles.circularButton, { 
-              backgroundColor: currentTheme.buttonBackground,
-              opacity: loadingAreas ? 0.5 : 1 // Diminui a opacidade se estiver carregando
-          }]}
-          onPress={handleMainButton}
-          disabled={loadingAreas} // Desabilita se estiver carregando
-        >
+        <TouchableOpacity style={[styles.circularButton, { backgroundColor: currentTheme.buttonBackground }]} onPress={handleMainButton}>
           <Text style={[styles.buttonText, { color: currentTheme.buttonText }]}>
-            {isFirstTime ? 'VAMOS COMEÇAR!' : 'VER ÚLTIMO MATERIAL'}
+            {isFirstTime ? 'VAMOS COMEÇAR!' : 'CONTINUAR JORNADA'}
           </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={ async () => {
+          await AsyncStorage.removeItem('@App:onboardingComplete');
+          setIsFirstTime(true);
+          Alert.alert('Dev Mode', 'Onboarding resetado! O app acha que é sua primeira vez.');
+        }} style={{ marginTop: 40 }}>
+            <Text style={{ color: currentTheme.text, fontSize: 12 }}>
+                (Resetar Primeira Vez - DEV ONLY)
+            </Text>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={signOut} style={{ marginTop: 20 }}>
             <Text style={{ color: currentTheme.text }}>
-                (Logout para Teste)
+                Sair (Logout)
             </Text>
         </TouchableOpacity>
 
