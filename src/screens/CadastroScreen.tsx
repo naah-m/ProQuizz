@@ -5,11 +5,15 @@ import { useNavigation } from '@react-navigation/native';
 import { theme } from '../styles/theme/colors';
 import { styles } from '../styles/cadastro.styles';
 import { Input } from '../components/InputText';
+import { useAuth } from '../context/AuthContext';
 import { AuthScreenNavigationProp } from '../navigation/types';
 
 export function CadastroScreen() {
 
   const navigation = useNavigation<AuthScreenNavigationProp>();
+
+  const { signUp } = useAuth(); 
+  const [isLoading, setIsLoading] = useState(false);
 
   const deviceTheme = useColorScheme();
   const isDarkMode = deviceTheme === 'dark';
@@ -21,7 +25,7 @@ export function CadastroScreen() {
   const [apelido, setApelido] = useState('');
   const [aceitouTermos, setAceitouTermos] = useState(false);
 
-  const handleCadastro = () => {
+  const handleCadastro = async () => {
     if (!nome.trim() || !email.trim() || !senha.trim() || !apelido.trim()) {
       Alert.alert('Atenção', 'Por favor, preencha todos os campos.');
       return;
@@ -37,52 +41,38 @@ export function CadastroScreen() {
       return;
     }
 
-    Alert.alert('Sucesso', 'Cadastro realizado!', [{text: 'Ok', onPress: () => navigation.goBack()}]);
+    try {
+      setIsLoading(true);
+      await signUp({ nome, email, apelido });
+    } catch (error) {
+      Alert.alert('Erro', 'Nào foi possível realizar o cadastro')
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: currentTheme.background }]}>
-      <StatusBar 
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'} 
-        backgroundColor={currentTheme.background} 
-      />
+      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} backgroundColor={currentTheme.background} />
 
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={{ flex: 1 }}
-      >
-        <ScrollView 
-          contentContainerStyle={styles.scrollContent} 
-          showsVerticalScrollIndicator={false}
-        >
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
+        <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
           
           <Text style={[styles.headerText, { color: currentTheme.text }]}>
             Basta preencher seus dados e tudo estará pronto para começar!
           </Text>
 
           <View style={styles.formContainer}>
-            <Input
-              label="Nome Completo" value={nome} onChangeText={setNome}
-            />
+            <Input label="Nome Completo" value={nome} onChangeText={setNome} />
 
-            <Input
-              label="E-mail" keyboardType="email-address" autoCapitalize="none" value={email} onChangeText={setEmail}
-            />
+            <Input label="E-mail" keyboardType="email-address" autoCapitalize="none" value={email} onChangeText={setEmail} />
 
-            <Input
-              label="Senha" secureTextEntry value={senha} onChangeText={setSenha}
-            />
+            <Input label="Senha" secureTextEntry value={senha} onChangeText={setSenha}/>
 
-            <Input
-              label="Apelido" autoCapitalize="none" value={apelido} onChangeText={setApelido}
-            />
+            <Input label="Apelido" autoCapitalize="none" value={apelido} onChangeText={setApelido}/>
           </View>
 
-          <TouchableOpacity 
-            style={styles.checkboxContainer} 
-            onPress={() => setAceitouTermos(!aceitouTermos)}
-            activeOpacity={0.7}
-          >
+          <TouchableOpacity style={styles.checkboxContainer} onPress={() => setAceitouTermos(!aceitouTermos)} activeOpacity={0.7}>
             <View style={[styles.checkboxBase, aceitouTermos && styles.checkboxChecked]}>
                 {aceitouTermos && <View style={styles.checkboxInner} />}
             </View>
@@ -92,10 +82,7 @@ export function CadastroScreen() {
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity 
-            style={[styles.buttonPrimary, { backgroundColor: currentTheme.secondaryButton }]}
-            onPress={handleCadastro}
-          >
+          <TouchableOpacity style={[styles.buttonPrimary, { backgroundColor: currentTheme.secondaryButton }]} onPress={handleCadastro}>
             <Text style={[styles.buttonText, { color: currentTheme.background }]}>
               CADASTRE-SE
             </Text>

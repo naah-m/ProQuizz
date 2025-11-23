@@ -58,7 +58,7 @@ export function HomeScreen({ navigation }: HomeProps) {
     if (loadingState) {
       return (
         <View style={[styles.container, { backgroundColor: currentTheme.background, justifyContent: 'center', alignItems: 'center' }]}>
-          <ActivityIndicator size="large" color={currentTheme.buttonBackground} />
+          <ActivityIndicator size="large" color={currentTheme.buttonBackground}/>
         </View>
       );
     }

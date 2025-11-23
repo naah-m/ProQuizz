@@ -9,7 +9,6 @@ export const styles = StyleSheet.create({
         width: '100%',
         paddingVertical: 15,
         alignItems: 'center',
-        backgroundColor: 'black', 
         marginBottom: 20
     },
 
@@ -75,7 +74,9 @@ export const styles = StyleSheet.create({
     logoutButton: {
         alignSelf: 'center',
         marginTop: 40,
-        padding: 10
+        padding: 10,
+        flexDirection: 'row',
+        marginLeft: 10
     },
 
     logoutText: {

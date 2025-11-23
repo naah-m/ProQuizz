@@ -20,7 +20,7 @@ const MOCK_AREAS: AreaAtuacao[] = [
   {
     id: '3',
     nome: 'Engenharias',
-    icone: 'hard-hat',
+    icone: 'tool',
     descricao: 'Projetos, construção e infraestrutura.',
     conteudo: 'Tipos de engenharia (Civil, Mecânica, Elétrica) e mercado de trabalho.'
   },

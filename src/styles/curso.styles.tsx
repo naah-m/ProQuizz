@@ -5,6 +5,30 @@ export const styles = StyleSheet.create({
         flex: 1
     },
 
+    fixedHeader: {
+        width: '100%',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 20,
+        position: 'absolute',
+        zIndex: 10,
+        top: 0,
+        left: 0
+    },
+
+    backButton: {
+        padding: 5
+    },
+
+    headerTitle: {
+        fontSize: 17,
+        fontWeight: 'bold',
+        color: 'white',
+        flex: 1,
+        textAlign: 'center'
+    },
+
     loadingContainer: {
         flex: 1,
         justifyContent: 'center',
@@ -13,16 +37,7 @@ export const styles = StyleSheet.create({
 
     scrollContent: {
         paddingHorizontal: 16,
-        paddingBottom: 40
-    },
-
-    areaHeader: {
-        width: '100%',
-        paddingVertical: 15,
-        borderRadius: 12,
-        alignItems: 'center',
-        marginTop: 20,
-        marginBottom: 20
+        paddingBottom: 40,
     },
 
     areaTitle: {
@@ -33,9 +48,9 @@ export const styles = StyleSheet.create({
 
     moduleCard: {
         width: '100%',
-        borderRadius: 8,
+        borderRadius: 15,
         padding: 15,
-        marginBottom: 10,
+        marginTop: 20,
         borderWidth: 1
     },
 
@@ -64,7 +79,7 @@ export const styles = StyleSheet.create({
     quizButton: {
         width: '100%',
         padding: 15,
-        borderRadius: 8,
+        borderRadius: 15,
         marginTop: 20,
         flexDirection: 'row',
         justifyContent: 'space-between',

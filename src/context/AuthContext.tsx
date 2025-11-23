@@ -8,6 +8,7 @@ interface AuthContextData {
   user: Usuario | null;
   loading: boolean;
   signIn: (email: string, pass: string) => Promise<void>;
+  signUp: (dados: { nome: string; email: string; apelido: string }) => Promise<void>;
   signOut: () => Promise<void>;
 }
 
@@ -55,6 +56,30 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
+  async function signUp(dados: { nome: string; email: string; apelido: string }) {
+    try {
+      setLoading(true);
+
+      const newUser: Usuario = {
+        id: String(new Date().getTime()),
+        nome: dados.nome,
+        email: dados.email,
+        apelido: dados.apelido,
+        pontos: 0
+      };
+
+      setUser(newUser);
+
+      await AsyncStorage.setItem('@App:user', JSON.stringify(newUser));
+
+    } catch (error) {
+      console.error('Erro no cadastro:', error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  }
+
   async function signOut() {
     try {
       setUser(null);
@@ -66,7 +91,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, signIn, signOut }}>
+    <AuthContext.Provider value={{ user, loading, signIn, signUp, signOut }}>
       {children}
     </AuthContext.Provider>
   );

@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
     fontSize: 26,
     fontWeight: 'bold',
     marginHorizontal: 20,
-    marginTop: 20,
+    marginTop: 60,
     marginBottom: 20
   },
 

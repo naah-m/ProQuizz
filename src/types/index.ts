@@ -4,7 +4,7 @@ export interface Usuario {
   apelido: string;
   email: string;
   pontos: number;
-  isFirstTimeUser: boolean;
+  isFirstTimeUser?: boolean;
 }
 
 export interface AreaAtuacao {

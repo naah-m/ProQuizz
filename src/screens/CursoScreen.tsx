@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, TouchableOpacity, SafeAreaView, useColorScheme, ScrollView, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, useColorScheme, ScrollView, Alert, ActivityIndicator, StatusBar } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Feather from '@expo/vector-icons/Feather';
 
 import { theme } from '../styles/theme/colors';
@@ -56,6 +57,8 @@ export function CursoScreen({ navigation, route }: CursoProps) {
   const isDarkMode = deviceTheme === 'dark';
   const currentTheme = isDarkMode ? theme.dark : theme.light;
 
+  const insets = useSafeAreaInsets();
+
   useEffect(() => {
     async function fetchArea() {
       try {
@@ -96,14 +99,24 @@ export function CursoScreen({ navigation, route }: CursoProps) {
   }
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: currentTheme.background }]}>
-        <ScrollView contentContainerStyle={styles.scrollContent}>
+    <View style={[styles.container, { backgroundColor: currentTheme.background }]}>
 
-            <View style={[styles.areaHeader, { backgroundColor: currentTheme.buttonBackground }]}>
-                <Text style={styles.areaTitle}>
-                    {areaData.nome.toUpperCase()}
-                </Text>
-            </View>
+      <StatusBar barStyle='light-content' backgroundColor='transparent' translucent />
+
+      <View style={[styles.fixedHeader, {backgroundColor: currentTheme.buttonBackground, borderBottomColor: currentTheme.inputBackground, paddingTop: insets.top, height: 60 + insets.top}]}>
+        
+        <TouchableOpacity onPress={() => navigation.goBack()} hitSlop={{ top: 15, bottom: 15, left: 15, right: 15 }} style={styles.backButton}>
+          <Feather name="arrow-left" size={24} color="white" />
+        </TouchableOpacity>
+
+        <Text style={styles.headerTitle} numberOfLines={1}>
+          {areaData.nome.toUpperCase()}
+        </Text>
+
+        <View style={{ width: 24 }} />
+      </View>
+
+        <ScrollView contentContainerStyle={[styles.scrollContent, { paddingTop: 80 + insets.top }]} showsVerticalScrollIndicator={false}>
 
             {modules.map(module => (
                 <ModuleCard
@@ -116,28 +129,20 @@ export function CursoScreen({ navigation, route }: CursoProps) {
                 />
             ))}
 
-            <TouchableOpacity
-                style={[
-                    styles.quizButton,
+            <TouchableOpacity style={[ styles.quizButton,
                     { 
-                        backgroundColor: allModulesCompleted ? currentTheme.buttonBackground : currentTheme.inputPlaceholder,
-                        opacity: allModulesCompleted ? 1 : 0.7
+                      backgroundColor: allModulesCompleted ? currentTheme.buttonBackground : currentTheme.inputPlaceholder, 
+                      opacity: allModulesCompleted ? 1 : 0.7 
                     }
-                ]}
-                onPress={handleQuizPress}
-                disabled={!allModulesCompleted}
-            >
+                ]} onPress={handleQuizPress} disabled={!allModulesCompleted}>
+
                 <Text style={[styles.quizButtonText, { color: allModulesCompleted ? currentTheme.buttonText : currentTheme.text }]}>
                     Quiz - Conteúdo Básico
                 </Text>
-                <Feather 
-                    name={(allModulesCompleted ? "lock-open" : "lock") as any} 
-                    size={20} 
-                    color={allModulesCompleted ? currentTheme.buttonText : currentTheme.text} 
-                />
+                <Feather name={(allModulesCompleted ? "unlock" : "lock") as any} size={20} color={allModulesCompleted ? currentTheme.buttonText : currentTheme.text}/>
             </TouchableOpacity>
 
         </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }

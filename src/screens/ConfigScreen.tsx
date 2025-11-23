@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
-import { View, Text, TouchableOpacity, SafeAreaView, useColorScheme, ScrollView, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, SafeAreaView, useColorScheme, ScrollView, Alert, StatusBar } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Feather from '@expo/vector-icons/Feather';
 
 import { theme } from '../styles/theme/colors';
@@ -16,18 +17,18 @@ interface ConfigItemProps {
 }
 
 const ConfigItem: React.FC<ConfigItemProps> = ({ title, description, icon, onPress, currentTheme }) => (
-    <TouchableOpacity
-        style={styles.itemContainer}
-        onPress={onPress}
-    >
+    <TouchableOpacity style={styles.itemContainer} onPress={onPress}>
+
         <View style={styles.itemContent}>
             <Text style={[styles.itemTitle, { color: currentTheme.text }]}>
                 {title}
             </Text>
+
             <Text style={[styles.itemDescription, { color: currentTheme.inputPlaceholder }]}>
                 {description}
             </Text>
         </View>
+
         <Feather name={icon as any} size={20} color={currentTheme.text} />
     </TouchableOpacity>
 );
@@ -36,6 +37,7 @@ const ConfigItem: React.FC<ConfigItemProps> = ({ title, description, icon, onPre
 export function ConfigScreen({ navigation }: MaterialProps) {
   
   const { user, signOut } = useAuth();
+  const insets = useSafeAreaInsets();
   
   const deviceTheme = useColorScheme();
   const isDarkMode = deviceTheme === 'dark';
@@ -60,9 +62,11 @@ export function ConfigScreen({ navigation }: MaterialProps) {
   }, []);
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: currentTheme.background }]}>
+    <View style={[styles.container, { backgroundColor: currentTheme.background }]}>
 
-        <View style={[styles.header, { backgroundColor: currentTheme.buttonBackground }]}>
+        <StatusBar barStyle='light-content' backgroundColor='transparent' translucent />
+
+        <View style={[styles.header, { backgroundColor: currentTheme.buttonBackground, paddingTop: insets.top + 20, paddingBottom: 20 }]}>
             <Text style={styles.headerText}>CONFIGURAÇÕES</Text>
         </View>
 
@@ -72,10 +76,12 @@ export function ConfigScreen({ navigation }: MaterialProps) {
                 <Text style={[styles.sectionTitle, { color: currentTheme.text }]}>
                     {user?.apelido || 'Usuário'}
                 </Text>
+                
                 <TouchableOpacity onPress={handleEditApelido}>
                     <Feather name="edit-3" size={20} color={currentTheme.text} />
                 </TouchableOpacity>
             </View>
+
             <Text style={[styles.sectionSubtitle, { color: currentTheme.inputPlaceholder }]}>
                 Perfil
             </Text>
@@ -121,13 +127,16 @@ export function ConfigScreen({ navigation }: MaterialProps) {
                 currentTheme={currentTheme}
             />
 
-            <TouchableOpacity onPress={signOut} style={styles.logoutButton}>
-                <Text style={[styles.logoutText, { color: 'red' }]}>
-                    Sair da Conta (Logout)
-                </Text>
-            </TouchableOpacity>
+            <View>
+                <TouchableOpacity onPress={signOut} style={styles.logoutButton}>
+                    <Text style={[styles.logoutText, { color: 'red' }]}>
+                        Sair da Conta
+                    </Text>
+                    <Feather name="log-out" size={20} color='red' style={{ marginLeft: 10, marginTop: 2 }}/>
+                </TouchableOpacity>
+            </View>
 
         </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }

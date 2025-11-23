@@ -1,10 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { QuestaoQuiz, RespostaUsuario } from '../types';
 import { quizService } from '../services/quizService';
-/**
- * Hook para gerenciar o estado, a lógica e a pontuação de um quiz.
- * @param areaId O ID da área para buscar as perguntas.
- */
+
 export function useQuizLogic(areaId: string) {
   const [questions, setQuestions] = useState<QuestaoQuiz[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
