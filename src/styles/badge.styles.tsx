@@ -64,7 +64,7 @@ export const styles = StyleSheet.create({
   unlockedText: {
       fontSize: 10,
       fontWeight: 'bold',
-      color: '#FFD700',
+      color: '#C76422',
       marginTop: 8
   }
 });

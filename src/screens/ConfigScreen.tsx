@@ -47,7 +47,7 @@ export function ConfigScreen({ navigation }: MaterialProps) {
   }, []);
 
   const handleExportBadges = useCallback(() => {
-    Alert.alert('Funcionalidade', 'Gerar arquivo PDF/JSON com as conquistas.');
+    Alert.alert('Nova Funcionalidade', 'Gerar arquivo para as Badges conquistadas');
   }, []);
 
   const handleThemeToggle = useCallback(() => {
@@ -116,7 +116,7 @@ export function ConfigScreen({ navigation }: MaterialProps) {
                 title="Exportar Certificados"
                 description="Exportar certificados de cursos realizados"
                 icon="download"
-                onPress={() => Alert.alert('Funcionalidade', 'Gerar certificados.')}
+                onPress={() => Alert.alert('Nova Funcionalidade', 'Gerar certificados em PDF')}
                 currentTheme={currentTheme}
             />
 
@@ -132,7 +132,7 @@ export function ConfigScreen({ navigation }: MaterialProps) {
                 title="Termos e Condições"
                 description="Revise nossos termos e condições"
                 icon="file-text"
-                onPress={() => Alert.alert('Ação', 'Abrir modal/link dos Termos.')}
+                onPress={() => Alert.alert('Implementar Ação', 'Abrir link dos Termos')}
                 currentTheme={currentTheme}
             />
 

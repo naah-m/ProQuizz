@@ -56,7 +56,7 @@ export function HomeScreen({ navigation }: HomeProps) {
     <SafeAreaView style={[styles.container, { backgroundColor: currentTheme.background }]}>
       <View style={styles.content}>
 
-        <Text style={[styles.headerText, { color: currentTheme.text }]}>
+        <Text style={[styles.headerText, { color: '#C76422' }]}>
           Bem Vindo{' '}
           <Text style={styles.nicknameText}>
             {user?.apelido || 'Usuário'}! 
@@ -72,7 +72,7 @@ export function HomeScreen({ navigation }: HomeProps) {
           </Text>
         </View>
 
-        <TouchableOpacity style={[styles.circularButton, { backgroundColor: currentTheme.buttonBackground }]} onPress={handleMainButton}>
+        <TouchableOpacity style={[styles.circularButton, { backgroundColor: '#2CA11D' }]} onPress={handleMainButton}>
           <Text style={[styles.buttonText, { color: currentTheme.buttonText }]}>
             {isFirstTime ? 'VAMOS COMEÇAR!' : 'CONTINUAR JORNADA'}
           </Text>

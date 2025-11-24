@@ -16,7 +16,7 @@ interface BadgeCardProps {
 }
 
 const BadgeCard: React.FC<BadgeCardProps> = ({ badge, currentTheme }) => {
-    const iconColor = badge.unlocked ? '#FFD700' : currentTheme.inputPlaceholder; 
+    const iconColor = badge.unlocked ? '#C76422' : currentTheme.inputPlaceholder; 
     const iconName = badge.unlocked ? badge.icone : 'lock';
     
     return (
@@ -62,7 +62,7 @@ export function BadgeScreen({ }: MaterialProps) {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: currentTheme.background }]}>
         <Text style={[styles.headerTitle, { color: currentTheme.text }]}>
-            🏆 Suas Conquistas
+            Seus Badges
         </Text>
         
         {error && (
