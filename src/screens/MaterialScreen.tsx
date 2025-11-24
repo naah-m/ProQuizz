@@ -8,6 +8,7 @@ import { styles } from '../styles/material.styles';
 import { useFetchAreas } from '../hooks/useFetchAreas';
 import { AreaAtuacao } from '../types/index';
 import { MaterialProps } from '../navigation/types';
+import { useTheme } from '../context/ThemeContext';
 
 interface AreaCardProps {
     area: AreaAtuacao;
@@ -41,10 +42,8 @@ export function MaterialScreen({ navigation }: MaterialProps) {
 
   const { areas, loading, error, reload } = useFetchAreas(true); 
   
-  const deviceTheme = useColorScheme();
-  const isDarkMode = deviceTheme === 'dark';
-  const currentTheme = isDarkMode ? theme.dark : theme.light;
-
+  const { theme: currentTheme } = useTheme();
+  
   useFocusEffect(
     useCallback(() => {
       reload();

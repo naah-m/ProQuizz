@@ -5,7 +5,8 @@ import Feather from '@expo/vector-icons/Feather';
 import { theme } from '../styles/theme/colors';
 import { styles } from '../styles/badge.styles';
 import { useFetchBadges } from '../hooks/useFetchBadges'; 
-import { MaterialProps } from '../navigation/types'; 
+import { MaterialProps } from '../navigation/types';
+import { useTheme } from '../context/ThemeContext';
 
 const NUM_COLUMNS = 2;
 
@@ -47,9 +48,7 @@ export function BadgeScreen({ }: MaterialProps) {
   
   const { badges, loading, error } = useFetchBadges(); 
   
-  const deviceTheme = useColorScheme();
-  const isDarkMode = deviceTheme === 'dark';
-  const currentTheme = isDarkMode ? theme.dark : theme.light;
+  const { theme: currentTheme } = useTheme();
 
   if (loading) {
     return (

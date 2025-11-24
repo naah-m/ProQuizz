@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, TouchableOpacity, useColorScheme, ScrollView, Alert, ActivityIndicator, StatusBar } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Alert, ActivityIndicator, StatusBar } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Feather from '@expo/vector-icons/Feather';
@@ -9,6 +9,8 @@ import { styles } from '../styles/curso.styles';
 import { AreaAtuacao } from '../types';
 import { areaService } from '../services/areaService';
 import { CursoProps } from '../navigation/types';
+import { useTheme } from '../context/ThemeContext';
+import { useAuth } from '../context/AuthContext';
 
 interface ModuleCardProps {
     title: string;
@@ -40,6 +42,7 @@ const ModuleCard: React.FC<ModuleCardProps> = ({ title, description, isCompleted
 
 export function CursoScreen({ navigation, route }: CursoProps) {
 
+  const { user } = useAuth();
   const { areaId } = route.params;
   const insets = useSafeAreaInsets();
 
@@ -47,17 +50,15 @@ export function CursoScreen({ navigation, route }: CursoProps) {
   const [loading, setLoading] = useState(true);
 
   const [modules, setModules] = useState([
-    { id: 1, title: 'Funções Administrativas', desc: 'Planejamento, Organização, Direção e Controle', isCompleted: false },
-    { id: 2, title: 'Áreas de Gestão', desc: 'Financeira, Marketing, Logística, Estratégica, entre outros', isCompleted: false },
-    { id: 3, title: 'Habilidades Comportamentais', desc: 'Liderança, Comunicação e Pensamento crítico', isCompleted: false },
-    { id: 4, title: 'Habilidades Técnicas', desc: 'Análise de dados e Ferramentas digitais', isCompleted: false },
+    { id: 1, title: 'Módulo 1', desc: 'Fundamentos Essenciais', isCompleted: false },
+    { id: 2, title: 'Módulo 2', desc: 'Aplicações Práticas', isCompleted: false },
+    { id: 3, title: 'Módulo 3', desc: 'Avançando no Conhecimento', isCompleted: false },
+    { id: 4, title: 'Módulo 4', desc: 'Integração e Desafios', isCompleted: false },
   ]);
   
   const allModulesCompleted = modules.every(m => m.isCompleted);
 
-  const deviceTheme = useColorScheme();
-  const isDarkMode = deviceTheme === 'dark';
-  const currentTheme = isDarkMode ? theme.dark : theme.light;
+  const { theme: currentTheme , isDarkMode } = useTheme();
 
   const STORAGE_KEY = `@App:progress:${areaId}`;
 
@@ -126,13 +127,26 @@ export function CursoScreen({ navigation, route }: CursoProps) {
 
       <StatusBar barStyle='light-content' backgroundColor='transparent' translucent />
 
-      <View style={[styles.fixedHeader, {backgroundColor: currentTheme.buttonBackground, borderBottomColor: currentTheme.inputBackground, paddingTop: insets.top, height: 60 + insets.top}]}>
+      <View style={[
+        styles.fixedHeader, 
+        {
+          backgroundColor: currentTheme.background, 
+          borderBottomColor: currentTheme.inputBackground, 
+          borderBottomWidth: 1, 
+          paddingTop: insets.top, 
+          height: 60 + insets.top
+        }
+        ]}>
         
-        <TouchableOpacity onPress={() => navigation.goBack()} hitSlop={{ top: 15, bottom: 15, left: 15, right: 15 }} style={styles.backButton}>
-          <Feather name="arrow-left" size={24} color="white" />
+        <TouchableOpacity 
+          onPress={() => navigation.goBack()} 
+          hitSlop={{ top: 15, bottom: 15, left: 15, right: 15 }} 
+          style={styles.backButton}
+        >
+          <Feather name="arrow-left" size={24} color={currentTheme.text} />
         </TouchableOpacity>
 
-        <Text style={styles.headerTitle} numberOfLines={1}>
+        <Text style={[styles.headerTitle, { color: currentTheme.text }]} numberOfLines={1}>
           {areaData.nome.toUpperCase()}
         </Text>
 

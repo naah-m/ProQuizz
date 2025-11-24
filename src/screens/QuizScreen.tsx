@@ -5,6 +5,7 @@ import { theme } from '../styles/theme/colors';
 import { styles } from '../styles/quiz.styles';
 import { useQuizLogic } from '../hooks/useQuizLogic';
 import { QuizProps } from '../navigation/types';
+import { useTheme } from '../context/ThemeContext';
 
 interface OptionButtonProps {
     option: string;
@@ -42,9 +43,7 @@ export function QuizScreen({ navigation, route }: QuizProps) {
     result,
   } = useQuizLogic(areaId); 
 
-  const deviceTheme = useColorScheme();
-  const isDarkMode = deviceTheme === 'dark';
-  const currentTheme = isDarkMode ? theme.dark : theme.light;
+  const { theme: currentTheme } = useTheme();
 
   const handleQuizFinish = useCallback(() => {
       Alert.alert(

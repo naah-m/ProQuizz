@@ -18,6 +18,7 @@ import { AreaSelectionScreen } from '../screens/AreaSelectionScreen';
 import { RootStackParamList, AppTabParamList } from './types';
 import { useAuth } from '../context/AuthContext';
 import { theme } from '../styles/theme/colors';
+import { useTheme } from '../context/ThemeContext';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<AppTabParamList>();
@@ -108,19 +109,19 @@ function AppStack() {
 export function Routes() {
   const { user, loading } = useAuth();
 
-  const scheme = useColorScheme();
-  const currentTheme = scheme === 'dark' ? DarkTheme : DefaultTheme;
+  const { theme: currentTheme, isDarkMode } = useTheme();
+  const navTheme = isDarkMode ? DarkTheme : DefaultTheme;
 
   if (loading) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: scheme === 'dark' ? 'black' : 'white' }}>
-        <ActivityIndicator size="large" color={scheme === 'dark' ? 'white' : 'black'} />
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: currentTheme.background }}>
+        <ActivityIndicator size="large" color={currentTheme.text} />
       </View>
     );
   }
 
   return (
-    <NavigationContainer theme={currentTheme}>
+    <NavigationContainer theme={navTheme}>
       { user ? <AppStack /> : <AuthStack /> }
     </NavigationContainer>
   );

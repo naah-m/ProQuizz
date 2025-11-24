@@ -6,6 +6,7 @@ import { theme } from '../styles/theme/colors';
 import { useAuth } from '../context/AuthContext';
 import { HomeProps } from '../navigation/types';
 import { styles } from '../styles/home.styles';
+import { useTheme } from '../context/ThemeContext';
 
 export function HomeScreen({ navigation }: HomeProps) {
 
@@ -13,10 +14,8 @@ export function HomeScreen({ navigation }: HomeProps) {
     const [loadingState, setLoadingState] = useState(true);
     const [isFirstTime, setIsFirstTime] = useState(false); 
 
-    const deviceTheme = useColorScheme();
-    const isDarkMode = deviceTheme === 'dark';
-    const currentTheme = isDarkMode ? theme.dark : theme.light;
-
+    const { theme: currentTheme } = useTheme();
+    
     useEffect(() => {
       checkOnboardingStatus();
     }, []);

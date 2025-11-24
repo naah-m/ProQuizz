@@ -1,11 +1,12 @@
 import React, { useCallback } from 'react';
-import { View, Text, TouchableOpacity, SafeAreaView, useColorScheme, ScrollView, Alert, StatusBar } from 'react-native';
+import { View, Text, TouchableOpacity, useColorScheme, ScrollView, Alert, StatusBar } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Feather from '@expo/vector-icons/Feather';
 
 import { theme } from '../styles/theme/colors';
 import { styles } from '../styles/config.styles';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import { MaterialProps } from '../navigation/types';
 
 interface ConfigItemProps {
@@ -39,9 +40,7 @@ export function ConfigScreen({ navigation }: MaterialProps) {
   const { user, signOut } = useAuth();
   const insets = useSafeAreaInsets();
   
-  const deviceTheme = useColorScheme();
-  const isDarkMode = deviceTheme === 'dark';
-  const currentTheme = isDarkMode ? theme.dark : theme.light;
+  const { theme: currentTheme, setThemeMode, themeMode, isDarkMode } = useTheme();
 
   const handleEditApelido = useCallback(() => {
     Alert.alert('Funcionalidade', 'Implementar tela de edição de perfil.');
@@ -54,20 +53,23 @@ export function ConfigScreen({ navigation }: MaterialProps) {
   const handleThemeToggle = useCallback(() => {
     Alert.alert(
         'Alterar Tema', 
-        'Aqui você poderia ter um seletor para forçar Light ou Dark, independentemente do sistema.',
+        `Tema atual: ${themeMode === 'system' ? 'Automático' : themeMode === 'dark' ? 'Escuro' : 'Claro'}`,
         [
-            { text: 'OK', style: 'cancel' }
+            { text: 'Automático (Sistema)', onPress: () => setThemeMode('system') },
+            { text: 'Claro', onPress: () => setThemeMode('light') },
+            { text: 'Escuro', onPress: () => setThemeMode('dark') },
+            { text: 'Cancelar', style: 'cancel' }
         ]
     );
-  }, []);
+  }, [themeMode, setThemeMode]);
 
   return (
     <View style={[styles.container, { backgroundColor: currentTheme.background }]}>
 
-        <StatusBar barStyle='light-content' backgroundColor='transparent' translucent />
+        <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} backgroundColor='transparent' translucent />
 
-        <View style={[styles.header, { backgroundColor: currentTheme.buttonBackground, paddingTop: insets.top + 20, paddingBottom: 20 }]}>
-            <Text style={styles.headerText}>CONFIGURAÇÕES</Text>
+        <View style={[styles.header, { backgroundColor: currentTheme.background, paddingTop: insets.top + 20, paddingBottom: 20, borderBottomWidth: 1, borderBottomColor: currentTheme.inputBackground }]}>
+            <Text style={[styles.headerText, { color: currentTheme.text }]}>CONFIGURAÇÕES</Text>
         </View>
 
         <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -113,7 +115,7 @@ export function ConfigScreen({ navigation }: MaterialProps) {
 
             <ConfigItem
                 title="Alterar Tema"
-                description="Atualize o tema do aplicativo"
+                description={`Atual: ${themeMode === 'system' ? 'Auto' : themeMode === 'dark' ? 'Escuro' : 'Claro'}`}
                 icon="sun" 
                 onPress={handleThemeToggle}
                 currentTheme={currentTheme}
