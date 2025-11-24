@@ -44,9 +44,9 @@ export const styles = StyleSheet.create({
   checkboxBase: {
     width: 24,
     height: 24,
-    borderRadius: 12, // Redondo
+    borderRadius: 12, 
     borderWidth: 2,
-    borderColor: '#B0B0B0', // Cinza médio para a borda
+    borderColor: '#B0B0B0',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 10,
@@ -54,23 +54,23 @@ export const styles = StyleSheet.create({
   },
 
   checkboxChecked: {
-    borderColor: '#4A90E2' // Azul quando selecionado (ou use a cor do tema)
+    borderColor: '#4A90E2'
   },
 
   checkboxInner: {
     width: 12,
     height: 12,
     borderRadius: 6,
-    backgroundColor: '#4A90E2'// Bolinha interna preenchida
+    backgroundColor: '#4A90E2'
   },
 
   checkboxLabel: {
     fontSize: 14,
-    flex: 1 // Para o texto quebrar linha se necessário
+    flex: 1
   },
 
   buttonPrimary: {
-    height: 56, // Botão um pouco mais alto conforme imagem
+    height: 56,
     borderRadius: 28,
     justifyContent: 'center',
     alignItems: 'center'
@@ -78,7 +78,7 @@ export const styles = StyleSheet.create({
 
   buttonText: {
     fontWeight: 'bold',
-    fontSize: 18, // Texto maior no botão principal
+    fontSize: 18,
     letterSpacing: 1
   }
 });

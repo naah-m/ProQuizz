@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { View, Text, TouchableOpacity, useColorScheme, ScrollView, Alert, StatusBar } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Alert, StatusBar } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Feather from '@expo/vector-icons/Feather';
 
@@ -68,7 +68,14 @@ export function ConfigScreen({ navigation }: MaterialProps) {
 
         <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} backgroundColor='transparent' translucent />
 
-        <View style={[styles.header, { backgroundColor: currentTheme.background, paddingTop: insets.top + 20, paddingBottom: 20, borderBottomWidth: 1, borderBottomColor: currentTheme.inputBackground }]}>
+        <View style={[styles.header, 
+            {
+            backgroundColor: currentTheme.background,
+            paddingTop: insets.top + 20, paddingBottom: 20, 
+            borderBottomWidth: 1,
+            borderBottomColor: currentTheme.inputBackground
+            }
+        ]}>
             <Text style={[styles.headerText, { color: currentTheme.text }]}>CONFIGURAÇÕES</Text>
         </View>
 

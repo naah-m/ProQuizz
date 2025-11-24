@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Badge } from '../types';
+
 import { badgeService } from '../services/badgeService';
 
 interface BadgeStatus extends Badge {
@@ -17,7 +18,6 @@ export function useFetchBadges() {
         setLoading(true);
         const { all, userIds } = await badgeService.getBadges();
         
-        // Mapeia todas as badges, adicionando o status 'unlocked'
         const categorizedBadges: BadgeStatus[] = all.map(badge => ({
           ...badge,
           unlocked: userIds.includes(badge.id),

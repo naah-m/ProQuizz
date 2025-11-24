@@ -16,10 +16,10 @@ export const styles = StyleSheet.create({
     marginTop: 60
   },
 
-  logoText: {
-    fontSize: 40,
-    fontWeight: 'bold',
-    textAlign: 'center'
+  logo: {
+    width: 200,
+    height: 150,
+    marginTop: 40
   },
 
   formContainer: {

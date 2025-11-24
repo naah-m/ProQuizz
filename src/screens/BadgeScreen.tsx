@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, SafeAreaView, useColorScheme, FlatList, ActivityIndicator } from 'react-native';
+import { View, Text, SafeAreaView, FlatList, ActivityIndicator } from 'react-native';
 import Feather from '@expo/vector-icons/Feather';
 
 import { theme } from '../styles/theme/colors';

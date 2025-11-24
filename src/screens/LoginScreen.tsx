@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, useColorScheme, KeyboardAvoidingView, Platform, SafeAreaView, StatusBar, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, KeyboardAvoidingView, Platform, SafeAreaView, Alert, Image, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-import { theme } from '../styles/theme/colors';
 import { styles } from '../styles/login.styles';
 import { Input } from '../components/InputText';
 import { AuthScreenNavigationProp } from '../navigation/types';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
+import logo from '../assets/image/ProQuizz_v2.png';
 
 export function LoginScreen() {
+
+  const navigation = useNavigation<AuthScreenNavigationProp>();
 
   const { signIn } = useAuth();
 
@@ -16,13 +19,9 @@ export function LoginScreen() {
   const [senha, setSenha] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const navigation = useNavigation<AuthScreenNavigationProp>();
+  const { theme: currentTheme } = useTheme();
 
-  const deviceTheme = useColorScheme(); 
-  const isDarkMode = deviceTheme === 'dark';
-  const currentTheme = isDarkMode ? theme.dark : theme.light;
-
-  const handleLogin = async () => {
+  async function handleLogin() {
 
     if(!login.trim() || !senha.trim()) {
       Alert.alert('Atenção', 'Preencha com o login e senha');
@@ -31,9 +30,12 @@ export function LoginScreen() {
 
     try {
       setLoading(true);
+
       await signIn(login, senha);
+
     } catch (error) {
       Alert.alert("Erro", "Dados inválidos. Tente novamente");
+      
     } finally {
       setLoading(false);
     }
@@ -41,26 +43,21 @@ export function LoginScreen() {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: currentTheme.background }]}>
-      <StatusBar 
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'} 
-        backgroundColor={currentTheme.background} 
-      />
       
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.content}
-      >
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.content}>
+
         <View style={styles.logoContainer}>
-          <Text style={[styles.logoText, { color: currentTheme.text }]}>
-            Logo {/*substituir pela imagem*/}
-          </Text>
+            <Image source={logo} style={styles.logo} resizeMode='contain' />
         </View>
 
         <View style={styles.formContainer}>
           <Input
-            label="Login"
+            label="E-mail"
             value={login}
             onChangeText={setLogin}
             autoCapitalize="none"
+            keyboardType="email-address"
           />
 
           <Input
@@ -71,11 +68,15 @@ export function LoginScreen() {
           />
 
           <TouchableOpacity 
-            style={[styles.buttonPrimary, { backgroundColor: currentTheme.buttonBackground }]} onPress={handleLogin}
+            style={[styles.buttonPrimary, { backgroundColor: currentTheme.buttonBackground }]} onPress={handleLogin} disabled={loading}
           >
-            <Text style={[styles.buttonText, { color: currentTheme.buttonText }]}>
-              {loading ? 'Entrando...' : 'ENTRAR'}
-            </Text>
+              {loading ? (
+                <ActivityIndicator color={currentTheme.buttonText} />
+              ) : (
+                <Text style={[styles.buttonText, { color: currentTheme.buttonText }]}>
+                  ENTRAR
+                </Text>
+              )}
           </TouchableOpacity>
         </View>
 

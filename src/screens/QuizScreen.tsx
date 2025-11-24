@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { View, Text, TouchableOpacity, SafeAreaView, useColorScheme, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, SafeAreaView, ActivityIndicator, Alert } from 'react-native';
 
 import { theme } from '../styles/theme/colors';
 import { styles } from '../styles/quiz.styles';

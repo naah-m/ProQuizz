@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, TouchableOpacity, SafeAreaView, useColorScheme, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, SafeAreaView, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { theme } from '../styles/theme/colors';
 import { useAuth } from '../context/AuthContext';
 import { HomeProps } from '../navigation/types';
 import { styles } from '../styles/home.styles';
