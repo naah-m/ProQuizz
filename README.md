@@ -2,6 +2,11 @@
 
 > Uma solução móvel para auxiliar adolescentes e profissionais em transição a descobrirem seu caminho através de trilhas de aprendizado interativas e gamificação.
 
+## 📌 Integrantes do Projeto
+* Nathália Mantovani -- RM 99904
+* João Victor Ignacio Madella -- RM 561007
+* Renato de Angelo -- RM 560585
+
 ---
 
 ## 🎯 O Problema
@@ -15,6 +20,12 @@ O **ProQuizz** visa democratizar o acesso à orientação vocacional de qualidad
 * **Reduzimos a Evasão Universitária:** Menos tempo e dinheiro desperdiçados em cursos sem afinidade;
 * **Aumentamos a Satisfação Profissional:** Conexão baseada em aptidão real, não apenas em teoria;
 * **Fomentamos o Autoconhecimento:** O sistema de *Badges* recompensa a curiosidade e a exploração de novas áreas.
+
+---
+
+## Vídeo 
+* Link:
+    
 
 ---
 
@@ -59,6 +70,7 @@ src/
 │   └── ...
 └── styles/             # Definições de Estilos Globais e Temas
 ```
+---
 
 ## 🚀 Como Rodar o Projeto
 
