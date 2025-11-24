@@ -15,6 +15,7 @@ export type RootStackParamList = {
   AppTabs: {screen: keyof AppTabParamList; params?: any} | undefined;
   Quiz: { areaId: string};
   Curso: { areaId: string};
+  AreaSelection: { isOnboarding?: boolean };
   Material: undefined;
 };
 
@@ -41,3 +42,5 @@ export type QuizProps = {
   navigation: NativeStackNavigationProp<RootStackParamList>;
   route: RouteProp<RootStackParamList, 'Quiz'>;
 };
+
+export type AreaSelectionProps = NativeStackScreenProps<RootStackParamList, 'AreaSelection'>;

@@ -39,18 +39,9 @@ export function HomeScreen({ navigation }: HomeProps) {
 
     const handleMainButton = useCallback(async () => {
     if (isFirstTime) {
-      try {
-        await AsyncStorage.setItem('@App.onboardingComplete', 'true');
-        setIsFirstTime(false);
-        Alert.alert('Bem-vindo!', 'Vamos começar escolhendo sua trilha');
-        navigation.navigate('AppTabs', { screen: 'MaterialTab'});
+      navigation.navigate('AreaSelection', { isOnboarding: true });
 
-      } catch (e) {
-        Alert.alert('Não foi possível salvar seu progresso');
-      } 
-      
     } else {
-        Alert.alert('Bem-vindo de volta!', 'Te levando para seu último conteúdo');
         navigation.navigate('AppTabs', { screen: 'MaterialTab'});
       }
     }, [navigation, isFirstTime]);

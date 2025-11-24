@@ -91,7 +91,7 @@ export function ConfigScreen({ navigation }: MaterialProps) {
                 title="Áreas de Afinidade"
                 description="Altere as carreiras escolhidas primeiramente"
                 icon="chevron-right"
-                onPress={() => Alert.alert('Ação', 'Implementar seleção de áreas.')}
+                onPress={() => navigation.navigate('AreaSelection', { isOnboarding: false })}
                 currentTheme={currentTheme}
             />
             

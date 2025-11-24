@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import { View, Text, TouchableOpacity, SafeAreaView, useColorScheme, FlatList, ActivityIndicator } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import Feather from '@expo/vector-icons/Feather';
 
 import { theme } from '../styles/theme/colors';
@@ -38,11 +39,17 @@ const AreaCard: React.FC<AreaCardProps> = ({ area, onPress, currentTheme }) => (
 
 export function MaterialScreen({ navigation }: MaterialProps) {
 
-  const { areas, loading, error, reload } = useFetchAreas(); 
+  const { areas, loading, error, reload } = useFetchAreas(true); 
   
   const deviceTheme = useColorScheme();
   const isDarkMode = deviceTheme === 'dark';
   const currentTheme = isDarkMode ? theme.dark : theme.light;
+
+  useFocusEffect(
+    useCallback(() => {
+      reload();
+    }, [reload])
+  );
 
   const handleAreaPress = useCallback((area: AreaAtuacao) => {
     navigation.navigate('Curso', { areaId: area.id });
@@ -53,9 +60,23 @@ export function MaterialScreen({ navigation }: MaterialProps) {
       return (
         <View style={styles.feedbackContainer}>
           <ActivityIndicator size="large" color={currentTheme.buttonBackground} />
-          <Text style={{ color: currentTheme.text, marginTop: 10 }}>Carregando materiais...</Text>
+          <Text style={{ color: currentTheme.text, marginTop: 10 }}>Carregando...</Text>
         </View>
       );
+    }
+
+    if(areas.length === 0) {
+      return (
+        <View style={styles.feedbackContainer}>
+          <Feather name="inbox" size={48} color={currentTheme.inputPlaceholder} />
+          <Text style={[styles.errorText, { color: currentTheme.text, marginTop: 10 }]}>
+            Nenhuma área selecionada.
+          </Text>
+          <TouchableOpacity onPress={() => navigation.navigate('AreaSelection', { isOnboarding: false })}>
+            <Text style={styles.reloadButton}>Ir para Configurações</Text>
+          </TouchableOpacity>
+        </View>
+      )
     }
 
     if (error) {
@@ -86,7 +107,7 @@ export function MaterialScreen({ navigation }: MaterialProps) {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: currentTheme.background }]}>
         <Text style={[styles.headerTitle, { color: currentTheme.text }]}>
-            Explorar Áreas de Atuação
+            Suas Áreas de Atuação
         </Text>
       {renderContent()}
     </SafeAreaView>

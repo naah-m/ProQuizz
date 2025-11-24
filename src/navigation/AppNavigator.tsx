@@ -13,6 +13,7 @@ import { QuizScreen } from '../screens/QuizScreen';
 import { CursoScreen } from '../screens/CursoScreen';
 import { ConfigScreen } from '../screens/ConfigScreen';
 import { BadgeScreen } from '../screens/BadgeScreen';
+import { AreaSelectionScreen } from '../screens/AreaSelectionScreen';
 
 import { RootStackParamList, AppTabParamList } from './types';
 import { useAuth } from '../context/AuthContext';
@@ -99,6 +100,7 @@ function AppStack() {
       <Stack.Screen name='AppTabs' component={AppTabs} />
       <Stack.Screen name='Quiz' component={QuizScreen} />
       <Stack.Screen name='Curso' component={CursoScreen} />
+      <Stack.Screen name='AreaSelection' component={AreaSelectionScreen} />
     </Stack.Navigator>
   )
 }
